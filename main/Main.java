@@ -11,6 +11,11 @@ public class Main{
         window.setResizable(false);
         window.setTitle ("Hayat_world");
 
+        GamePanel gamePanel = new GamePanel();
+        window.add(gamePanel);
+
+        window.pack();
+
         window.setLocationRelativeTo(null);
         window.setVisible(true); 
 
