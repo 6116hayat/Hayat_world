@@ -20,6 +20,8 @@ public class GamePanel extends JPanel implements Runnable{
     public final int screenWidth = tileSize * maxScreenCol; // 768 pixels
     public final int screenHeight = tileSize * maxScreenRow; // 576 pixels
 
+    // FPS
+    int FPS = 60;    
     KeyHandler keyH = new KeyHandler();
     Thread gameThread;
 
@@ -47,10 +49,28 @@ public class GamePanel extends JPanel implements Runnable{
     @Override
     public void run() {
 
+        // Creating Two Game Loops for the game
+        // 1. Sleep Method
+        // 2. Delta Method (We Will be using this)
+
+        double drawInterval = 1000000000/FPS ;
+        double delta = 0;
+        long lastTime = System.nanoTime();
+        long currentTime ;
+
         while(gameThread!= null){
 
-            update();
-            repaint();
+            currentTime = System.nanoTime();
+            delta += (currentTime  - lastTime)/drawInterval;
+
+            lastTime = currentTime ;
+
+            if (delta >= 1 ){
+                update();
+                repaint();
+                delta--;
+            }
+
         }
     }
 
@@ -60,14 +80,14 @@ public class GamePanel extends JPanel implements Runnable{
         if (keyH.upPressed == true){
             playerY -= playerSpeed;
         }
-        else if (keyH.leftPressed == true){
-            playerX -= playerSpeed;
-        }
         else if (keyH.downPressed == true){
             playerY += playerSpeed;
         }
+        else if (keyH.leftPressed == true){
+            playerX -= playerSpeed;
+        }
         else if (keyH.rightPressed == true){
-            playerY += playerSpeed;
+            playerX += playerSpeed;
         }
     }
 
