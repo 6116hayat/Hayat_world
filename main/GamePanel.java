@@ -3,6 +3,8 @@ package main;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 import javax.swing.JPanel;
 
@@ -18,7 +20,13 @@ public class GamePanel extends JPanel implements Runnable{
     public final int screenWidth = tileSize * maxScreenCol; // 768 pixels
     public final int screenHeight = tileSize * maxScreenRow; // 576 pixels
 
+    KeyHandler keyH = new KeyHandler();
     Thread gameThread;
+
+    //Setting Players Default position
+    int playerX = 100;
+    int playerY = 100;
+    int playerSpeed = 4;
 
     //Contructs of Game Panel
     public GamePanel(){
@@ -26,6 +34,8 @@ public class GamePanel extends JPanel implements Runnable{
         this.setPreferredSize(new Dimension(screenWidth,screenHeight));
         this.setBackground(Color.BLACK);
         this.setDoubleBuffered(true);
+        this.addKeyListener(keyH);
+        this.setFocusable(true);
     }
 
     public void startGameThread () {
@@ -36,5 +46,40 @@ public class GamePanel extends JPanel implements Runnable{
 
     @Override
     public void run() {
+
+        while(gameThread!= null){
+
+            update();
+            repaint();
+        }
+    }
+
+    // Creating the method to update the game everytime 
+    public void update(){
+
+        if (keyH.upPressed == true){
+            playerY -= playerSpeed;
+        }
+        else if (keyH.leftPressed == true){
+            playerX -= playerSpeed;
+        }
+        else if (keyH.downPressed == true){
+            playerY += playerSpeed;
+        }
+        else if (keyH.rightPressed == true){
+            playerY += playerSpeed;
+        }
+    }
+
+    // Creating  the method to paint the component again and again
+    public void paintComponent(Graphics g){
+
+        super.paintComponent(g);
+
+        Graphics2D g2 = (Graphics2D)g;
+        g2.setColor(Color.white);
+        g2.fillRect(playerX, playerY, tileSize, tileSize);
+
+        g2.dispose();
     }
 }
