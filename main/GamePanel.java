@@ -8,6 +8,8 @@ import java.awt.Graphics2D;
 
 import javax.swing.JPanel;
 
+import entity.Player;
+
 public class GamePanel extends JPanel implements Runnable{
 	
     //Screen Settings
@@ -24,6 +26,7 @@ public class GamePanel extends JPanel implements Runnable{
     int FPS = 60;    
     KeyHandler keyH = new KeyHandler();
     Thread gameThread;
+    Player player = new Player(this,keyH);
 
     //Setting Players Default position
     int playerX = 100;
@@ -77,18 +80,7 @@ public class GamePanel extends JPanel implements Runnable{
     // Creating the method to update the game everytime 
     public void update(){
 
-        if (keyH.upPressed == true){
-            playerY -= playerSpeed;
-        }
-        else if (keyH.downPressed == true){
-            playerY += playerSpeed;
-        }
-        else if (keyH.leftPressed == true){
-            playerX -= playerSpeed;
-        }
-        else if (keyH.rightPressed == true){
-            playerX += playerSpeed;
-        }
+        player.update();
     }
 
     // Creating  the method to paint the component again and again
@@ -97,8 +89,8 @@ public class GamePanel extends JPanel implements Runnable{
         super.paintComponent(g);
 
         Graphics2D g2 = (Graphics2D)g;
-        g2.setColor(Color.white);
-        g2.fillRect(playerX, playerY, tileSize, tileSize);
+
+       player.draw(g2);
 
         g2.dispose();
     }
